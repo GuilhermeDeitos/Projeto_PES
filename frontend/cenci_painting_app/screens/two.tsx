@@ -1,5 +1,4 @@
-import { ScreenContent } from 'components/ScreenContent';
-
+import { Register } from "components/Register";
 export default function TabTwoScreen() {
-  return <ScreenContent path="screens/two.tsx" title="Tab Two" />;
+  return <Register />;
 }
