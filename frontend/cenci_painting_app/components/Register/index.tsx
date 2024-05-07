@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 //Pagina de cadastro com os campos: Nome completo, email, telefone, senha e confirmação de senha
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet,Pressable } from 'react-native';
 import { Button, Input, Text, Card} from '@rneui/themed';
 
 
@@ -26,8 +26,64 @@ export const Register = () => {
         return password === confirmPassword
     }
 
-    return (
-        <Card style={styles.container}>
+    return (    
+ <View>
+            <View style={styles.container}>
+                <View style={styles.boxcontainer}>
+                    <Text h1 style={styles.mainText} >Register</Text>
+                    <Input
+                        
+                        style={styles.inputbox}
+                        placeholder="Full Name:"
+                        value={fullName}
+                        onChangeText={handleRegister}
+                        inputContainerStyle={{borderBottomWidth:0, width:"100%"}} 
+
+
+                    />
+                    <Input
+                        style={styles.inputbox}
+                        placeholder="Email"
+                        secureTextEntry
+                        value={password}
+                        onChangeText={handleRegister}
+                        inputContainerStyle={{borderBottomWidth:0, width:"100%"}}
+
+                    />
+                    <Input
+                        style={styles.inputbox}
+                        placeholder="Phone"
+                        secureTextEntry
+                        value={phone}
+                        onChangeText={handleRegister}
+                        inputContainerStyle={{borderBottomWidth:0, width:"100%"}}
+
+                    />
+                    <Input
+                        style={styles.inputbox}
+                        placeholder="Password"
+                        secureTextEntry
+                        value={password}
+                        onChangeText={handleRegister}
+                        inputContainerStyle={{borderBottomWidth:0, width:"100%"}}
+
+                    />
+                    <Input
+                        style={styles.inputbox}
+                        placeholder="Confirm Password"
+                        secureTextEntry
+                        value={confirmPassword}
+                        onChangeText={handleRegister}
+                        inputContainerStyle={{borderBottomWidth:0, width:"100%"}}
+
+                    />
+                    <Button title="Register" onPress={handleRegister} type="outline" radius={18}/>
+
+                </View>
+            </View>
+        </View>
+    
+      /*  <Card style={styles.container}>
             <Text h2 style={styles.mainText}>Register</Text>
             <Input
                 style={styles.input}
@@ -62,19 +118,67 @@ export const Register = () => {
                 onChangeText={setConfirmPassword}
             />
             <Button title="Register" onPress={handleRegister} type="outline" radius={18}/>
-        </Card>
+        </Card>*/
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
-        padding: 16,
+        backgroundColor: "white",
+        width: "100%",
+        height: "100%",
     },
+
+    inputbox:{
+        borderWidth:0.5,
+        borderRadius:10,
+        padding:5,
+        marginRight:"10%",
+        marginLeft:"10%",
+                
+    },
+    boxcontainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: "80%",
+        height: "80%",
+        backgroundColor: "#EEEEEE",
+        borderRadius: 10,
+        elevation:15,
+        shadowColor:"black",  
+    },
+
+    
+
+    button: {
+        width: '60%',
+        height: 40,
+        backgroundColor: "#58CDFF",
+        borderRadius: 30,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+    logintext: {
+        fontSize: 20,
+        fontWeight: "bold"
+    },
+
     mainText: {
-        marginBottom: 16,
         textAlign: 'center',
+        marginBottom: 60,
+        
+
+
     },
-   
+    forgotText: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: 'grey',
+    },
 });
