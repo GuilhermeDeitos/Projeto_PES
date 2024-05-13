@@ -5,7 +5,7 @@ import { HeaderButton } from 'components/HeaderButton';
 
 import { RootStackParamList } from '.';
 import TabNavigator from './tab-navigator';
-import Home from '../screens/home';
+import { Estoque } from 'components/Estoque/EmpityEstoque';
 
 type Props = StackScreenProps<RootStackParamList, 'DrawerNavigator'>;
 
@@ -15,17 +15,18 @@ export default function DrawerNavigator({ navigation }: Props) {
   return (
     <Drawer.Navigator>
       <Drawer.Screen
-        name="Home"
-        component={Home}
+        name="Tabs"
+        component={TabNavigator}
         options={{
+          headerRight: () => <HeaderButton onPress={() => navigation.navigate('Modal')} />,
           drawerIcon: ({ size, color }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+            <MaterialIcons name="border-bottom" size={size} color={color} />
           ),
         }}
       />
       <Drawer.Screen
-        name="Tabs"
-        component={TabNavigator}
+        name="Estoque"
+        component={Estoque}
         options={{
           headerRight: () => <HeaderButton onPress={() => navigation.navigate('Modal')} />,
           drawerIcon: ({ size, color }) => (

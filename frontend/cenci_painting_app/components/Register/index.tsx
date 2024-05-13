@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 //Pagina de cadastro com os campos: Nome completo, email, telefone, senha e confirmação de senha
 import React, { useState } from 'react';
-import { View, StyleSheet,Pressable } from 'react-native';
-import { Button, Input, Text, Card} from '@rneui/themed';
+import { View, StyleSheet, Pressable } from 'react-native';
+import { Button, Input, Text, Card, Image } from '@rneui/themed';
 
 
 export const Register = () => {
@@ -13,11 +13,11 @@ export const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const handleRegister = () => {
-        if(fullName && email && phone && password && confirmPassword && password) {
+        if (fullName && email && phone && password && confirmPassword && password) {
             alert(`Full Name: ${fullName}, Email: ${email}, Phone: ${phone}, Password: ${password}, Confirm Password: ${confirmPassword}`);
         } else if (!arePasswordEquals(password, confirmPassword)) {
             alert('Passwords do not match');
-        } else{
+        } else {
             alert('Please fill in the form');
         }
     };
@@ -26,18 +26,18 @@ export const Register = () => {
         return password === confirmPassword
     }
 
-    return (    
- <View>
+    return (
+        <View>
             <View style={styles.container}>
                 <View style={styles.boxcontainer}>
                     <Text h1 style={styles.mainText} >Register</Text>
                     <Input
-                        
+
                         style={styles.inputbox}
                         placeholder="Full Name:"
                         value={fullName}
                         onChangeText={handleRegister}
-                        inputContainerStyle={{borderBottomWidth:0, width:"100%"}} 
+                        inputContainerStyle={{ borderBottomWidth: 0, width: "100%" }}
 
 
                     />
@@ -47,7 +47,7 @@ export const Register = () => {
                         secureTextEntry
                         value={password}
                         onChangeText={handleRegister}
-                        inputContainerStyle={{borderBottomWidth:0, width:"100%"}}
+                        inputContainerStyle={{ borderBottomWidth: 0, width: "100%" }}
 
                     />
                     <Input
@@ -56,7 +56,7 @@ export const Register = () => {
                         secureTextEntry
                         value={phone}
                         onChangeText={handleRegister}
-                        inputContainerStyle={{borderBottomWidth:0, width:"100%"}}
+                        inputContainerStyle={{ borderBottomWidth: 0, width: "100%" }}
 
                     />
                     <Input
@@ -65,7 +65,7 @@ export const Register = () => {
                         secureTextEntry
                         value={password}
                         onChangeText={handleRegister}
-                        inputContainerStyle={{borderBottomWidth:0, width:"100%"}}
+                        inputContainerStyle={{ borderBottomWidth: 0, width: "100%" }}
 
                     />
                     <Input
@@ -74,51 +74,54 @@ export const Register = () => {
                         secureTextEntry
                         value={confirmPassword}
                         onChangeText={handleRegister}
-                        inputContainerStyle={{borderBottomWidth:0, width:"100%"}}
+                        inputContainerStyle={{ borderBottomWidth: 0, width: "100%" }}
 
                     />
-                    <Button title="Register" onPress={handleRegister} type="outline" radius={18}/>
+                    <Pressable style={styles.registerbutton} onPress={handleRegister}>
+                        <Text style={styles.logintext}>Register</Text>
+                    </Pressable>
+
 
                 </View>
             </View>
         </View>
-    
-      /*  <Card style={styles.container}>
-            <Text h2 style={styles.mainText}>Register</Text>
-            <Input
-                style={styles.input}
-                placeholder="Full Name"
-                value={fullName}
-                onChangeText={setFullName}
-            />
-            <Input
-                style={styles.input}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-            />
-            <Input
-                style={styles.input}
-                placeholder="Phone"
-                value={phone}
-                onChangeText={setPhone}
-            />
-            <Input
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-            />
-            <Input
-                style={styles.input}
-                placeholder="Confirm Password"
-                secureTextEntry
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-            />
-            <Button title="Register" onPress={handleRegister} type="outline" radius={18}/>
-        </Card>*/
+
+        /*  <Card style={styles.container}>
+              <Text h2 style={styles.mainText}>Register</Text>
+              <Input
+                  style={styles.input}
+                  placeholder="Full Name"
+                  value={fullName}
+                  onChangeText={setFullName}
+              />
+              <Input
+                  style={styles.input}
+                  placeholder="Email"
+                  value={email}
+                  onChangeText={setEmail}
+              />
+              <Input
+                  style={styles.input}
+                  placeholder="Phone"
+                  value={phone}
+                  onChangeText={setPhone}
+              />
+              <Input
+                  style={styles.input}
+                  placeholder="Password"
+                  secureTextEntry
+                  value={password}
+                  onChangeText={setPassword}
+              />
+              <Input
+                  style={styles.input}
+                  placeholder="Confirm Password"
+                  secureTextEntry
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+              />
+              <Button title="Register" onPress={handleRegister} type="outline" radius={18}/>
+          </Card>*/
     );
 };
 
@@ -131,14 +134,23 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
+    registerbutton: {
+        width: '60%',
+        height: 40,
+        backgroundColor: "#58CDFF",
+        borderRadius: 30,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 
-    inputbox:{
-        borderWidth:0.5,
-        borderRadius:10,
-        padding:5,
-        marginRight:"10%",
-        marginLeft:"10%",
-                
+    inputbox: {
+        borderWidth: 0.5,
+        borderRadius: 10,
+        padding: 5,
+        marginRight: "10%",
+        marginLeft: "10%",
+
     },
     boxcontainer: {
         display: 'flex',
@@ -148,11 +160,11 @@ const styles = StyleSheet.create({
         height: "80%",
         backgroundColor: "#EEEEEE",
         borderRadius: 10,
-        elevation:15,
-        shadowColor:"black",  
+        elevation: 15,
+        shadowColor: "black",
     },
 
-    
+
 
     button: {
         width: '60%',
@@ -172,7 +184,7 @@ const styles = StyleSheet.create({
     mainText: {
         textAlign: 'center',
         marginBottom: 60,
-        
+
 
 
     },

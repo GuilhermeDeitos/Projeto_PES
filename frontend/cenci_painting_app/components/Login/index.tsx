@@ -27,7 +27,12 @@ export function Login() {
 
     return (
         <View>
-            <Image source="https://www.specialdog.com.br/assets/uploads/images/gateirosdeprimeiraviagem.png" />
+            <View style={styles.imageContainer}>
+                <Image
+                    style={styles.image}
+                    source={require('assets/Logo (1).png')} />
+            </View>
+            
             <View style={styles.container}>
                 <View style={styles.boxcontainer}>
                     <Text h1 style={styles.mainText} >Login</Text>
@@ -72,6 +77,16 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
+    imageContainer: {
+        backgroundColor: "white",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        
+    },
+    image:{
+        
+    },
 
     inputbox:{
         borderWidth:0.5,
@@ -79,7 +94,7 @@ const styles = StyleSheet.create({
         padding:5,
         marginRight:"10%",
         marginLeft:"10%",
-                
+        
     },
     boxcontainer: {
         display: 'flex',
@@ -90,7 +105,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#EEEEEE",
         borderRadius: 10,
         elevation:15,
-        shadowColor:"black",  
+        shadowColor:"black", 
+        marginBottom: 80, 
     },
 
     
