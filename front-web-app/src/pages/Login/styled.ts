@@ -17,7 +17,7 @@ export const LoginPaper = styled(Paper)`
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    height: 50vh;
+    height: 40vh;
     gap: .5rem;
    
 `;
@@ -33,6 +33,6 @@ export const FormContainer = styled.form`
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    height: 80%;
+    height: 70%;
     gap: .5rem;
 `;

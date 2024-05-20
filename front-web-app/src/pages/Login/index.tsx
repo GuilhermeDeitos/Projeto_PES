@@ -2,6 +2,7 @@ import React from "react";
 import Logo from "../../assets/Logo.svg";
 import { Container, LoginPaper, InputGroup, FormContainer } from "./styled";
 import { TextField, Button, Typography, Link } from "@mui/material";
+import { TabFooter } from "../../components/Footer";
 
 interface Login {
   user: string;
@@ -55,6 +56,7 @@ export function Login() {
           </Link>
         </FormContainer>
       </LoginPaper>
+      <TabFooter />
     </Container>
   );
 }

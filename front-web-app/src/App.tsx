@@ -1,6 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Login } from './pages/Login'
 import { Register } from './pages/register';
+import { Home } from './pages/Home';
+import {UserPage} from './pages/Users';
+//import {  } from './pages/Estoque';
+
+//        <Route path="/storage" element={<EstoquePage />} />
 
 function App() {
 
@@ -9,6 +14,8 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register/>} />
+        <Route path="/home" element={<Home/>} />
+        <Route path="/users" element={<UserPage/>} />
       </Routes>
     </BrowserRouter>
   )

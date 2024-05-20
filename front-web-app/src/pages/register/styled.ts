@@ -17,7 +17,7 @@ export const RegisterPaper = styled(Paper)`
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    height: 50vh;
+    height: 55vh;
     gap: .5rem;
    
 `;
@@ -25,5 +25,14 @@ export const RegisterPaper = styled(Paper)`
 export const InputGroup = styled.div`
     display: flex;
     flex-direction: column;
+    gap: .5rem;
+`;
+
+export const FormContainer = styled.form`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
     gap: .5rem;
 `;
