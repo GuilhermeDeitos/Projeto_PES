@@ -1,29 +1,170 @@
 import { useState } from "react"
-import { CustomTable } from "../../components/Table"
 import { SearchField } from "../../components/SearchField"
-import { Container } from "@mui/material"
-
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { HeaderEstoque, BodyEstoque, ButtonEdit } from "./styled"
+import { Container } from "./styled"
+import estoque1imagem from "../../assets/estoque1.jpg"
 
 //Mexer aqui
-/*
-export function EstoquePage(){
+
+export function EstoquePage() {
     const fakeData: any[] = [
-            
+        {
+            id: 1,
+            name: "Produto 1",
+            price: "tinta",
+            stock: 10,
+            image: estoque1imagem
+        },
+        {
+            id: 2,
+            name: "Produto 2",
+            price: "tinta",
+            stock: 20,
+            image: estoque1imagem
+        },
+        {
+            id: 3,
+            name: "Produto 3",
+            price: "ferramenta",
+            stock: 30,
+            image: estoque1imagem
+        },
+        {
+            id: 4,
+            name: "Produto 4",
+            price: "ferramenta",
+            stock: 40,
+            image: estoque1imagem
+        },
+        {
+            id: 5,
+            name: "Produto 5",
+            price: "ferramenta",
+            stock: 50,
+            image: estoque1imagem
+        },
+        {
+            id: 6,
+            name: "Produto 6",
+            price: "ferramenta",
+            stock: 60,
+            image: estoque1imagem
+        },
+        {
+            id: 7,
+            name: "Produto 7",
+            price: "tinta",
+            stock: 70,
+            image: estoque1imagem
+        },
+        {
+            id: 8,
+            name: "Produto 8",
+            price: "ferramenta",
+            stock: 80,
+            image: estoque1imagem
+        },
+        {
+            id: 9,
+            name: "Produto 9",
+            price: "tinta",
+            stock: 90,
+            image: estoque1imagem
+        },
+        {
+            id: 10,
+            name: "Produto 10",
+            price: "ferramenta",
+            stock: 100,
+            image: estoque1imagem
+        }
+
     ]
 
     const [search, setSearch] = useState<string>("")
 
     const filteredData = fakeData.filter(data => JSON.stringify(data).toLowerCase().includes(search))
 
+    
 
-    return(
+
+    return (
         <Container>
-            <SearchField placeholder="Search" 
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}/>
-            <CustomTable columns={
-                Object.keys(fakeData[0])
-            } data={filteredData}/>
+            <HeaderEstoque>
+                <Typography fontSize={25}>Estoque</Typography>
+            </HeaderEstoque>
+            <BodyEstoque>
+                <SearchField
+                    placeholder="Search"
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                />
+                <TableContainer sx={{maxHeight:470, minWidth:370}}>
+                    <Table sx = {{minWidth: 1}} arial-label = 'simple label'>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{fontWeight:"bold"}} >Produto</TableCell>
+                            <TableCell align="right" sx={{fontWeight:"bold"}}>Code</TableCell>
+                            <TableCell align="right" sx={{fontWeight:"bold"}}>Categoria</TableCell>
+                            <TableCell align="right" sx={{fontWeight:"bold"}}>Qnt.</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {filteredData.map((data, index) => {
+                            return (
+                                <TableRow key={index}
+                                    sx={{'&:last-child td, &:last-child th': 
+                                    { border: 0 },
+                                    '&:not(:last-child)':{
+                                        paddingBottom: '5px',
+                                        paddingTop: '5px',
+                                    }
+                                    }}>
+                                    <TableCell>
+                                        <div style={{display: 'flex', flexDirection:'column', alignItems:'center',}}>
+                                            <img src={data.image} alt="Imagem do produto" style=
+                                            {{width: 60, height: 60}}/>
+                                            <div>{data.name}</div>
+                                        </div>
+                                        
+                                    </TableCell>
+                                    <TableCell align="center" >{data.id}</TableCell>
+                                    <TableCell align="center" >{data.price}</TableCell>
+                                    <TableCell align="center" >{data.stock}</TableCell>
+                                </TableRow>
+                            )
+                        })} 
+                    </TableBody>
+                </Table>
+                </TableContainer>
+                
+
+                
+            </BodyEstoque>
+            <ButtonEdit>
+                <Button variant="contained" sx = {{backgroundColor:'#A0CC90',
+                '&:hover':{
+                    backgroundColor:'#A0CC90',
+                },
+                '&:active':{
+                    backgroundColor:'#A0CC90',
+                },
+                color: 'black',
+                fontSize: 15,
+                fontWeight: 'bold',
+                borderRadius: 10,
+                height: 50,
+                width: 200,
+                position: 'fixed',
+                bottom: 15,
+        
+
+                }}>Editar produtos</Button>
+            </ButtonEdit>
+            
+            
+            
         </Container>
     )
-}*/
+}

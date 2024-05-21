@@ -3,7 +3,7 @@ import { Login } from './pages/Login'
 import { Register } from './pages/register';
 import { Home } from './pages/Home';
 import {UserPage} from './pages/Users';
-//import {  } from './pages/Estoque';
+import {EstoquePage} from './pages/Estoque';
 
 //        <Route path="/storage" element={<EstoquePage />} />
 
@@ -16,6 +16,7 @@ function App() {
         <Route path="/register" element={<Register/>} />
         <Route path="/home" element={<Home/>} />
         <Route path="/users" element={<UserPage/>} />
+        <Route path="/storage" element={<EstoquePage />} />
       </Routes>
     </BrowserRouter>
   )
