@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { SearchField } from "../../components/SearchField"
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { Button, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import { HeaderEstoque, BodyEstoque, ButtonEdit } from "./styled"
 import { Container } from "./styled"
 import estoque1imagem from "../../assets/estoque1.jpg"
@@ -83,8 +83,24 @@ export function EstoquePage() {
     ]
 
     const [search, setSearch] = useState<string>("")
+    const [page, setPage] = useState<number>(0)
+    const [rowsPerPage, setRowsPerPage] = useState<number>(5)
+    const [orderBy, setOrderBy] = useState<string>("code")
+    const [order, setOrder] = useState<string>("asc")
+    const optionsPage = [fakeData.length, 5, 10, 15, 20]
+    const keys = Object.keys(fakeData[0])
 
-    const filteredData = fakeData.filter(data => JSON.stringify(data).toLowerCase().includes(search))
+    const [filteredData, setFilteredData] = useState<any[]>(fakeData.filter(data => JSON.stringify(data).toLowerCase().includes(search)))
+
+    const handleRequestSort = (property: string) => {
+        const isAsc = orderBy === property && order === "asc"
+        setOrder(isAsc ? "desc" : "asc")
+        setOrderBy(property)
+        setFilteredData(filteredData.sort((a, b) =>
+            (a[property] < b[property] ? -1 : 1) * (isAsc ? 1 : -1)
+        ))
+
+    }
 
     
 
@@ -95,23 +111,61 @@ export function EstoquePage() {
                 <Typography fontSize={25}>Estoque</Typography>
             </HeaderEstoque>
             <BodyEstoque>
+                <span>
                 <SearchField
-                    placeholder="Search"
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                />
+                        placeholder="Search"
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
+                    />
+                <TableRow sx={{
+                    
+                }}>
+                   
+                    <TableCell sx={{
+                        padding:1
+                    }}>
+                        <Button onClick={() => setPage(page - 1)} disabled={page === 0} variant="outlined">Anterior</Button>
+                    </TableCell>
+                    <TableCell  sx={{
+                        padding:1                    }}>
+                        <Select 
+                            onChange={(event) =>{
+                                setPage(0)
+                                setRowsPerPage(Number(event.target.value))
+                            }}
+                            sx={{
+                                width: "100%",
+                            }}
+                        value={rowsPerPage}> 
+                            {optionsPage.map((option, index) => {
+                                return (
+                                    <MenuItem key={index} value={option}>{option}</MenuItem>
+                                )
+                            })}
+                        </Select>
+                    </TableCell>
+                    <TableCell  sx={{
+                        padding:1
+                    }}>
+                        <Button onClick={() => setPage(page + 1)} disabled={page === Math.floor(fakeData.length / rowsPerPage)} variant="outlined">Próximo</Button>
+                    </TableCell>
+                </TableRow>
+                </span>
                 <TableContainer sx={{maxHeight:470, minWidth:370}}>
                     <Table sx = {{minWidth: 1}} arial-label = 'simple label'>
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{fontWeight:"bold"}} >Produto</TableCell>
-                            <TableCell align="right" sx={{fontWeight:"bold"}}>Code</TableCell>
-                            <TableCell align="right" sx={{fontWeight:"bold"}}>Categoria</TableCell>
-                            <TableCell align="right" sx={{fontWeight:"bold"}}>Qnt.</TableCell>
+                            {keys.map((key, index) => {
+                                return (
+                                    <TableCell sx={{fontStyle:"bold"}} key={index} onClick={() => handleRequestSort(key)}>
+                                        {key}
+                                    </TableCell>
+                                )
+                            })}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredData.map((data, index) => {
+                        {filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((data, index) => {
                             return (
                                 <TableRow key={index}
                                     sx={{'&:last-child td, &:last-child th': 
@@ -121,17 +175,15 @@ export function EstoquePage() {
                                         paddingTop: '5px',
                                     }
                                     }}>
-                                    <TableCell>
-                                        <div style={{display: 'flex', flexDirection:'column', alignItems:'center',}}>
-                                            <img src={data.image} alt="Imagem do produto" style=
-                                            {{width: 60, height: 60}}/>
-                                            <div>{data.name}</div>
-                                        </div>
-                                        
-                                    </TableCell>
-                                    <TableCell align="center" >{data.id}</TableCell>
-                                    <TableCell align="center" >{data.price}</TableCell>
-                                    <TableCell align="center" >{data.stock}</TableCell>
+                                    {
+                                        keys.map((key, index) => {
+                                            return (
+                                                <TableCell key={index}>
+                                                    {key === "image" ? <img src={data[key]} alt="imagem" style={{width: 50, height: 50}}/> : data[key]}
+                                                </TableCell>
+                                            )
+                                        })
+                                    }
                                 </TableRow>
                             )
                         })} 
