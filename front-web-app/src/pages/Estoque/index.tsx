@@ -1,9 +1,10 @@
 import { useState } from "react"
 import { SearchField } from "../../components/SearchField"
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Drawer, List, ListItem, ListItemText } from "@mui/material"
 import { HeaderEstoque, BodyEstoque, ButtonEdit } from "./styled"
 import { Container } from "./styled"
 import estoque1imagem from "../../assets/estoque1.jpg"
+import tabs from "../../assets/tabs.svg"
 
 //Mexer aqui
 
@@ -84,7 +85,29 @@ export function EstoquePage() {
 
     const [search, setSearch] = useState<string>("")
 
-    const filteredData = fakeData.filter(data => JSON.stringify(data).toLowerCase().includes(search))
+    
+    const [open, setOpen] = useState(false)
+    const [drawerOpen, setDrawerOpen] = useState(false)
+    const [selectedUser, setSelectedUser] = useState<any>(null)
+
+    const handleClickOpen = (user: any) => {
+        setSelectedUser(user)
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+        setSelectedUser(null)
+    }
+
+    const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+        if (event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
+            return
+        }
+        setDrawerOpen(open)
+    }
+        const filteredData = fakeData.filter(data => JSON.stringify(data).toLowerCase().includes(search))
+    
 
     
 
@@ -93,6 +116,9 @@ export function EstoquePage() {
         <Container>
             <HeaderEstoque>
                 <Typography fontSize={25}>Estoque</Typography>
+                <div onClick={toggleDrawer(true)} style={{ cursor: 'pointer' }}>
+                    <img src={tabs} alt="tabs" style={{ width: 35, height: 50, marginLeft: 25 }} />
+                </div>
             </HeaderEstoque>
             <BodyEstoque>
                 <SearchField
@@ -162,9 +188,21 @@ export function EstoquePage() {
 
                 }}>Editar produtos</Button>
             </ButtonEdit>
-            
-            
-            
+
+            <Drawer anchor='right' open={drawerOpen} onClose={toggleDrawer(false)}>
+                <List>
+                    <ListItem button component="a" href="/Users">
+                        <ListItemText primary="Users" />
+                    </ListItem>
+                    <ListItem button component="a" href="/home">
+                        <ListItemText primary="Home" />
+                    </ListItem>
+                    
+                </List>
+            </Drawer>
         </Container>
+            
+            
+            
     )
 }

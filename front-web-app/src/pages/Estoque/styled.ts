@@ -42,7 +42,7 @@ export const BodyEstoque = styled.div`
     width: 70%;
     position: absolute;
     top: 10%;
-    left: 15%;
+    
     
     
     
