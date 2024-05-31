@@ -1,104 +1,174 @@
 import { useState } from "react"
 import { SearchField } from "../../components/SearchField"
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Drawer, List, ListItem, ListItemText } from "@mui/material"
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import EditIcon from '@mui/icons-material/Edit';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { HeaderEstoque, BodyEstoque, ButtonEdit } from "./styled"
+import Swal from "sweetalert2";
 import { Container } from "./styled"
 import estoque1imagem from "../../assets/estoque1.jpg"
+import Modal from "../../components/Modal"
 import tabs from "../../assets/tabs.svg"
 
 //Mexer aqui
+export interface Item {
+    id: number;
+    name: string;
+    price: number;
+    stock: number;
+    image: string;
+    description: string;
+    status: number;
+
+}
 
 export function EstoquePage() {
-    const fakeData: any[] = [
+    const fakeData: Item[] = [
         {
             id: 1,
             name: "Produto 1",
-            price: "tinta",
+            price: 17.99,
             stock: 10,
-            image: estoque1imagem
+            image: estoque1imagem,
+            description: "Produto de alta qualidade",
+            status: 1
         },
         {
             id: 2,
             name: "Produto 2",
-            price: "tinta",
+            price: 17.99,
             stock: 20,
-            image: estoque1imagem
+            image: estoque1imagem,
+            description: "Produto de alta qualidade",
+            status: 1
+
         },
         {
             id: 3,
             name: "Produto 3",
-            price: "ferramenta",
+            price: 17.99,
             stock: 30,
-            image: estoque1imagem
+            image: estoque1imagem,
+            description: "Produto de alta qualidade",
+            status: 1
         },
         {
             id: 4,
             name: "Produto 4",
-            price: "ferramenta",
+            price: 17.99,
             stock: 40,
-            image: estoque1imagem
+            image: estoque1imagem,
+            description: "Produto de alta qualidade",
+            status: 1
         },
         {
             id: 5,
             name: "Produto 5",
-            price: "ferramenta",
+            price: 17.99,
             stock: 50,
-            image: estoque1imagem
+            image: estoque1imagem,
+            description: "Produto de alta qualidade",
+            status: 1
         },
         {
             id: 6,
             name: "Produto 6",
-            price: "ferramenta",
+            price: 17.99,
             stock: 60,
-            image: estoque1imagem
+            image: estoque1imagem,
+            description: "Produto de alta qualidade",
+            status: 1
         },
         {
             id: 7,
             name: "Produto 7",
-            price: "tinta",
+            price: 17.99,
             stock: 70,
-            image: estoque1imagem
+            image: estoque1imagem,
+            description: "Produto de alta qualidade",
+            status: 1
         },
         {
             id: 8,
             name: "Produto 8",
-            price: "ferramenta",
+            price: 17.99,
             stock: 80,
-            image: estoque1imagem
+            image: estoque1imagem,
+            description: "Produto de alta qualidade",
+            status: 1
         },
         {
             id: 9,
             name: "Produto 9",
-            price: "tinta",
+            price: 17.99,
             stock: 90,
-            image: estoque1imagem
+            image: estoque1imagem,
+            description: "Produto de alta qualidade",
+            status: 1
         },
         {
             id: 10,
             name: "Produto 10",
-            price: "ferramenta",
+            price: 17.99,
             stock: 100,
-            image: estoque1imagem
-        }
-
+            image: estoque1imagem,
+            description: "Produto de alta qualidade",
+            status: 1
+        },
     ]
+
+    const fields = ["id", "name", "price", "stock", "actions"]
 
     const [search, setSearch] = useState<string>("")
 
     
-    const [open, setOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [selectedUser, setSelectedUser] = useState<any>(null)
 
-    const handleClickOpen = (user: any) => {
-        setSelectedUser(user)
-        setOpen(true)
+    const handleOpen = (type:string) => {
+        if(type === "edit") {
+            setIsEditModalOpen(true)
+        } else if (type === "info") {
+            setIsInfoModalOpen(true)
+        } else {
+            setIsDeleteModalOpen(true)
+        }
     }
 
     const handleClose = () => {
-        setOpen(false)
-        setSelectedUser(null)
+            setIsEditModalOpen(false)
+            setIsInfoModalOpen(false)
+            setIsDeleteModalOpen(false)
+
     }
+
+    const handleDeleteModal = () => {
+        Swal.fire({
+            title: 'Você tem certeza?',
+            text: "Você não poderá reverter isso!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sim, deletar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire(
+                'Deletado!',
+                'Seu Item foi deletado.',
+                'success'
+              )
+            }
+          })
+    }
+
+    
+
+    
 
     const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
         if (event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
@@ -116,8 +186,8 @@ export function EstoquePage() {
         <Container>
             <HeaderEstoque>
                 <Typography fontSize={25}>Estoque</Typography>
-                <div onClick={toggleDrawer(true)} style={{ cursor: 'pointer' }}>
-                    <img src={tabs} alt="tabs" style={{ width: 35, height: 50, marginLeft: 25 }} />
+                <div onClick={toggleDrawer(true)} style={{ cursor: 'pointer', marginRight:0  }}>
+                    <img src={tabs} alt="tabs" style={{ width: 35, height: 50, marginLeft: 25}} />
                 </div>
             </HeaderEstoque>
             <BodyEstoque>
@@ -126,18 +196,19 @@ export function EstoquePage() {
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                 />
-                <TableContainer sx={{maxHeight:470, minWidth:370}}>
+                <TableContainer sx={{maxHeight:470, minWidth:370, overflow:"revert"}}>
                     <Table sx = {{minWidth: 1}} arial-label = 'simple label'>
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{fontWeight:"bold"}} >Produto</TableCell>
-                            <TableCell align="right" sx={{fontWeight:"bold"}}>Code</TableCell>
-                            <TableCell align="right" sx={{fontWeight:"bold"}}>Categoria</TableCell>
-                            <TableCell align="right" sx={{fontWeight:"bold"}}>Qnt.</TableCell>
+                            {
+                                fields.map((key) => (
+                                    <TableCell key={key} align="center" sx={{fontWeight: 'bold', fontSize: 16, color: '#A0CC90', padding:".5rem 0 .5rem 0"}}>{key}</TableCell>
+                                ))
+                            }
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredData.map((data, index) => {
+                        {filteredData.map((data: Item, index) => {
                             return (
                                 <TableRow key={index}
                                     sx={{'&:last-child td, &:last-child th': 
@@ -147,17 +218,29 @@ export function EstoquePage() {
                                         paddingTop: '5px',
                                     }
                                     }}>
-                                    <TableCell>
-                                        <div style={{display: 'flex', flexDirection:'column', alignItems:'center',}}>
-                                            <img src={data.image} alt="Imagem do produto" style=
-                                            {{width: 60, height: 60}}/>
-                                            <div>{data.name}</div>
-                                        </div>
-                                        
-                                    </TableCell>
-                                    <TableCell align="center" >{data.id}</TableCell>
-                                    <TableCell align="center" >{data.price}</TableCell>
-                                    <TableCell align="center" >{data.stock}</TableCell>
+                                    {
+                                        fields.map((key:string) => (
+                                            <TableCell key={key} align="center" sx={{
+                                                width: key === "actions" ? "30%" : "auto",
+                                            }}>
+                                                {key === "actions" ? (
+                                                    <div style={{
+                                                        display: 'flex',
+                                                        justifyContent: 'space-around',
+                                                        gap: 5,
+                                                        alignItems: 'center'
+                                                    
+                                                    }}>
+
+                                                        <InfoOutlinedIcon sx={{color: '#003775', cursor: 'pointer'}} onClick={() => handleOpen("info")} />
+                                                        <EditIcon sx={{color: '#eead2d', cursor: 'pointer'}} onClick={() => handleOpen("edit")} />
+                                                        <DeleteOutlineIcon sx={{color: '#d44038', cursor: 'pointer'}} onClick={handleDeleteModal}/>
+                                                    </div>
+                                                ) : data[key as keyof Item]}
+                                            </TableCell>
+                                        ))
+                                    }
+                                    
                                 </TableRow>
                             )
                         })} 
@@ -168,26 +251,6 @@ export function EstoquePage() {
 
                 
             </BodyEstoque>
-            <ButtonEdit>
-                <Button variant="contained" sx = {{backgroundColor:'#A0CC90',
-                '&:hover':{
-                    backgroundColor:'#A0CC90',
-                },
-                '&:active':{
-                    backgroundColor:'#A0CC90',
-                },
-                color: 'black',
-                fontSize: 15,
-                fontWeight: 'bold',
-                borderRadius: 10,
-                height: 50,
-                width: 200,
-                position: 'fixed',
-                bottom: 15,
-        
-
-                }}>Editar produtos</Button>
-            </ButtonEdit>
 
             <Drawer anchor='right' open={drawerOpen} onClose={toggleDrawer(false)}>
                 <List>
@@ -200,6 +263,20 @@ export function EstoquePage() {
                     
                 </List>
             </Drawer>
+            <Modal
+                width="50%"
+                height="50%"
+                isModalClosed={handleClose}
+                isModalOpen={isInfoModalOpen}
+                title="Detalhes do Produto"
+            >
+                <div>
+                    <Typography>{selectedUser?.name}</Typography>
+                    <Typography>{selectedUser?.price}</Typography>
+                    <Typography>{selectedUser?.stock}</Typography>
+                    <Typography>{selectedUser?.description}</Typography>
+                </div>
+            </Modal>
         </Container>
             
             

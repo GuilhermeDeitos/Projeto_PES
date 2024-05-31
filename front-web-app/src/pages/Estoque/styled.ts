@@ -18,6 +18,7 @@ export const HeaderEstoque = styled.div`
     justify-content: flex-start;
     align-items: center;
     padding: 20px;
+    margin-right:0;
     background-color: #8FFEA1;
     color: black;
     border-radius: 30px 0 0px 30px;
