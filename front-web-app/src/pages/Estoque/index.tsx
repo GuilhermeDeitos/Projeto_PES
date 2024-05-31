@@ -1,10 +1,11 @@
 import { useState } from "react"
 import { SearchField } from "../../components/SearchField"
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Drawer, List, ListItem, ListItemText } from "@mui/material"
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Drawer, List, ListItem, ListItemText } from "@mui/material"
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { HeaderEstoque, BodyEstoque, ButtonEdit } from "./styled"
+import { HeaderEstoque, BodyEstoque } from "./styled"
+import { InfoItem } from "../../components/Forms/InfoItem"
 import Swal from "sweetalert2";
 import { Container } from "./styled"
 import estoque1imagem from "../../assets/estoque1.jpg"
@@ -125,24 +126,22 @@ export function EstoquePage() {
     
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [drawerOpen, setDrawerOpen] = useState(false)
-    const [selectedUser, setSelectedUser] = useState<any>(null)
+    const [selectedItem, setselectedItem] = useState<Item | undefined>(undefined)
 
-    const handleOpen = (type:string) => {
+    const handleOpen = (type:string, data: Item) => {
         if(type === "edit") {
             setIsEditModalOpen(true)
         } else if (type === "info") {
             setIsInfoModalOpen(true)
-        } else {
-            setIsDeleteModalOpen(true)
-        }
+        } 
+
+        setselectedItem(data)
     }
 
     const handleClose = () => {
             setIsEditModalOpen(false)
             setIsInfoModalOpen(false)
-            setIsDeleteModalOpen(false)
 
     }
 
@@ -177,6 +176,7 @@ export function EstoquePage() {
         setDrawerOpen(open)
     }
         const filteredData = fakeData.filter(data => JSON.stringify(data).toLowerCase().includes(search))
+        
     
 
     
@@ -232,8 +232,8 @@ export function EstoquePage() {
                                                     
                                                     }}>
 
-                                                        <InfoOutlinedIcon sx={{color: '#003775', cursor: 'pointer'}} onClick={() => handleOpen("info")} />
-                                                        <EditIcon sx={{color: '#eead2d', cursor: 'pointer'}} onClick={() => handleOpen("edit")} />
+                                                        <InfoOutlinedIcon sx={{color: '#003775', cursor: 'pointer'}} onClick={() => handleOpen("info",data)} />
+                                                        <EditIcon sx={{color: '#eead2d', cursor: 'pointer'}} onClick={() => handleOpen("edit", data)} />
                                                         <DeleteOutlineIcon sx={{color: '#d44038', cursor: 'pointer'}} onClick={handleDeleteModal}/>
                                                     </div>
                                                 ) : data[key as keyof Item]}
@@ -270,13 +270,27 @@ export function EstoquePage() {
                 isModalOpen={isInfoModalOpen}
                 title="Detalhes do Produto"
             >
-                <div>
-                    <Typography>{selectedUser?.name}</Typography>
-                    <Typography>{selectedUser?.price}</Typography>
-                    <Typography>{selectedUser?.stock}</Typography>
-                    <Typography>{selectedUser?.description}</Typography>
-                </div>
-            </Modal>
+                <InfoItem
+                    description={selectedItem?.description ?? ''}
+                    id={selectedItem?.id ?? 0}
+                    image={selectedItem?.image ?? ""}
+                    name={selectedItem?.name ?? ""}
+                    price={selectedItem?.price ?? 0}
+                    status={selectedItem?.status ?? 0}
+                    stock={selectedItem?.stock ?? 0}
+                />
+            </Modal>   
+            <Modal
+                 width="50%"
+                 height="50%"
+                 isModalClosed={handleClose}
+                 isModalOpen={isEditModalOpen}
+                 title="Editar Produto"
+                 >
+                    <div>
+                        teste
+                    </div>
+                 </Modal>
         </Container>
             
             
