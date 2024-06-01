@@ -26,6 +26,7 @@ import Modal from "../../components/Modal";
 import { api } from "../../utils/api";
 
 interface UserData {
+  id: number;
   name: string;
   horasTrabalhadas: number;
   status: number;
@@ -65,7 +66,7 @@ export function UsersPage() {
     setIsInfoModalOpen(false);
   };
 
-  const handleDeleteModal = () => {
+  const handleDeleteModal = (id:number) => {
     Swal.fire({
       title: "Você tem certeza?",
       text: "Você não poderá reverter isso!",
@@ -76,7 +77,16 @@ export function UsersPage() {
       confirmButtonText: "Sim, deletar!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire("Deletado!", "Usuário deletado.", "success");
+
+        api.delete(`/users/${id}`).then((response) => {
+          console.log(response);
+          setUserData(response.data.data);
+          Swal.fire("Deletado!", "Usuário deletado.", "success");
+
+        }).catch((error) => {
+          Swal.fire("Erro!", "Erro ao deletar usuário.", "error");
+        });
+
       }
     });
   };
@@ -186,7 +196,7 @@ export function UsersPage() {
                           />
                           <DeleteOutlineIcon
                             sx={{ color: "#d44038", cursor: "pointer" }}
-                            onClick={handleDeleteModal}
+                            onClick={() => handleDeleteModal(data.id)}
                           />
                         </div>
                       </TableCell>
