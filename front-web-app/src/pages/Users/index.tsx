@@ -80,7 +80,8 @@ export function UsersPage() {
 
         api.delete(`/users/${id}`).then((response) => {
           console.log(response);
-          setUserData(response.data.data);
+          const newUserData = userData.filter((data) => data.id !== id);
+          setUserData(newUserData);
           Swal.fire("Deletado!", "Usuário deletado.", "success");
 
         }).catch((error) => {

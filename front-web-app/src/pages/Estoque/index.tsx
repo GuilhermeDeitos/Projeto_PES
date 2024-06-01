@@ -76,7 +76,7 @@ export function EstoquePage() {
     setIsInfoModalOpen(false);
   };
 
-  const handleDeleteModal = () => {
+  const handleDeleteModal = (id:number) => {
     Swal.fire({
       title: "Você tem certeza?",
       text: "Você não poderá reverter isso!",
@@ -87,6 +87,13 @@ export function EstoquePage() {
       confirmButtonText: "Sim, deletar!",
     }).then((result) => {
       if (result.isConfirmed) {
+
+        api.delete(`/storage/${id}`).then((response) => {
+          console.log(response);
+          const newUserData = fakeData.filter((data) => data.id !== id);
+          setFakeData(newUserData);
+          Swal.fire("Deletado!", "Seu Item foi deletado.", "success");
+        });
         Swal.fire("Deletado!", "Seu Item foi deletado.", "success");
       }
     });
@@ -198,7 +205,7 @@ export function EstoquePage() {
                             />
                             <DeleteOutlineIcon
                               sx={{ color: "#d44038", cursor: "pointer" }}
-                              onClick={handleDeleteModal}
+                              onClick={() => handleDeleteModal(data.id)}
                             />
                           </div>
                         ) : (

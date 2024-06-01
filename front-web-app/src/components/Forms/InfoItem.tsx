@@ -1,12 +1,5 @@
 import React from "react";
 import { Item } from "../../pages/Estoque";
-<<<<<<< HEAD
-import { Typography, Container } from "@mui/material";
-
-export function InfoItem(itemData: Item) {
-  return <div>{itemData.name}</div>;
-}
-=======
 import { Typography,Container,Table } from "@mui/material";
 
 
@@ -42,4 +35,3 @@ export function InfoItem(itemData:Item) {
 
         )
 }
->>>>>>> 658b7729d9cf67e784f53170cfa588fd3811657c
