@@ -271,7 +271,7 @@ export function EstoquePage() {
         height="50%"
         isModalClosed={handleClose}
         isModalOpen={isInfoModalOpen}
-        title="Detalhes do Produto"
+        title="Product info:"
       >
         <InfoItem
           description={selectedItem?.description ?? ""}
