@@ -1,49 +1,34 @@
 import { CardTrabalhos } from "../../components/CardTrabalhos"
 import { Container } from "./styled"
 import { SearchField } from "../../components/SearchField"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { api } from "../../utils/api"
+import { CircularProgress, Box } from "@mui/material"
 
+interface JobData{
+    address: string;
+    title: string;
+    description: string;
+    image: string;
+    progress: number;
+    value: number;
 
-
+}
 export function Home(){
 
-    const fakeData = [
-        {
-            address: "Rua 1",
-            title: "Title 1",
-            description: "Description 1",
-            image: "https://www.w3schools.com/w3images/lights.jpg",
-            progress: 50,
-            value: 19900
-        },
-        {
-            address: "Rua 2",
-            title: "Title 2",
-            description: "Description 2",
-            image: "https://www.w3schools.com/w3images/lights.jpg",
-            progress: 75,
-            value: 10000
-        },
-        {
-            address: "Rua 3",
-            title: "Title 3",
-            description: "Description 3",
-            image: "https://www.w3schools.com/w3images/lights.jpg",
-            progress: 25,
-            value: 5000
-        },
-        {
-            address: "Rua 4",
-            title: "Title 4",
-            description: "Description 4",
-            image: "https://www.w3schools.com/w3images/lights.jpg",
-            progress: 100,
-            value: 1000
-        }
-    ]
+    const [loading, setLoading] = useState<boolean>(true)
+    const [jobsData, setJobsData] = useState<JobData[]>([])
     const [search, setSearch] = useState<string>("")
 
-    const filteredData = fakeData.filter(data => JSON.stringify(data).toLowerCase().includes(search))
+    useEffect(() => {
+        api.get("/jobs/").then((response) => {
+            console.log(response)
+            setJobsData(response.data.data)
+            setLoading(false)
+        })
+    }, [])
+
+    const filteredData = jobsData.filter(data => JSON.stringify(data).toLowerCase().includes(search))
     return (
         <Container>
             <SearchField
@@ -59,7 +44,7 @@ export function Home(){
                             address={data.address}
                             title={data.title}
                             description={data.description}
-                            image={data.image}
+                            image={data.image ? data.image : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLbIojNZJMCPt8-xOxWsqY27-XkGea2vq1dg&s"}
                             progress={data.progress}
                             value={data.value}
                         />

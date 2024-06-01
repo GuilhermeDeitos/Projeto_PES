@@ -1,208 +1,263 @@
-import { useState } from "react"
-import { SearchField } from "../../components/SearchField"
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Drawer, List, ListItem, ListItemText } from "@mui/material"
-import { HeaderEstoque, BodyEstoque, ButtonEdit } from "./styled"
-import { Container } from "./styled"
-import estoque1imagem from "../../assets/estoque1.jpg"
-import tabs from "../../assets/tabs.svg"
+import { useState, useEffect } from "react";
+import { SearchField } from "../../components/SearchField";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+  Box
+} from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditIcon from "@mui/icons-material/Edit";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { HeaderEstoque, BodyEstoque } from "./styled";
+import { InfoItem } from "../../components/Forms/InfoItem";
+import Swal from "sweetalert2";
+import { Container } from "./styled";
+import Modal from "../../components/Modal";
+import tabs from "../../assets/tabs.svg";
+import {api} from "../../utils/api";
 
 //Mexer aqui
+export interface Item {
+  id: number;
+  name: string;
+  price: number;
+  stock: number;
+  image: string;
+  description: string;
+  status: number;
+}
 
 export function EstoquePage() {
-    const fakeData: any[] = [
-        {
-            id: 1,
-            name: "Produto 1",
-            price: "tinta",
-            stock: 10,
-            image: estoque1imagem
-        },
-        {
-            id: 2,
-            name: "Produto 2",
-            price: "tinta",
-            stock: 20,
-            image: estoque1imagem
-        },
-        {
-            id: 3,
-            name: "Produto 3",
-            price: "ferramenta",
-            stock: 30,
-            image: estoque1imagem
-        },
-        {
-            id: 4,
-            name: "Produto 4",
-            price: "ferramenta",
-            stock: 40,
-            image: estoque1imagem
-        },
-        {
-            id: 5,
-            name: "Produto 5",
-            price: "ferramenta",
-            stock: 50,
-            image: estoque1imagem
-        },
-        {
-            id: 6,
-            name: "Produto 6",
-            price: "ferramenta",
-            stock: 60,
-            image: estoque1imagem
-        },
-        {
-            id: 7,
-            name: "Produto 7",
-            price: "tinta",
-            stock: 70,
-            image: estoque1imagem
-        },
-        {
-            id: 8,
-            name: "Produto 8",
-            price: "ferramenta",
-            stock: 80,
-            image: estoque1imagem
-        },
-        {
-            id: 9,
-            name: "Produto 9",
-            price: "tinta",
-            stock: 90,
-            image: estoque1imagem
-        },
-        {
-            id: 10,
-            name: "Produto 10",
-            price: "ferramenta",
-            stock: 100,
-            image: estoque1imagem
-        }
+  const [loading, setLoading] = useState<boolean>(true);
+  const [fakeData, setFakeData] = useState<Item[]>([]);
+  
 
-    ]
+  useEffect(() => {
+      api.get("/storage/").then((response) => {
+        console.log(response)
+        setFakeData(response.data.data);
+        setLoading(false);
+      });
+  }, []);
 
-    const [search, setSearch] = useState<string>("")
+  console.log(setFakeData)
 
-    
-    const [open, setOpen] = useState(false)
-    const [drawerOpen, setDrawerOpen] = useState(false)
-    const [selectedUser, setSelectedUser] = useState<any>(null)
+  const fields = ["id", "name", "price", "stock", "actions"];
 
-    const handleClickOpen = (user: any) => {
-        setSelectedUser(user)
-        setOpen(true)
+  const [search, setSearch] = useState<string>("");
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedItem, setselectedItem] = useState<Item | undefined>(undefined);
+
+  const handleOpen = (type: string, data: Item) => {
+    if (type === "edit") {
+      setIsEditModalOpen(true);
+    } else if (type === "info") {
+      setIsInfoModalOpen(true);
     }
 
-    const handleClose = () => {
-        setOpen(false)
-        setSelectedUser(null)
-    }
+    setselectedItem(data);
+  };
 
-    const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
-            return
-        }
-        setDrawerOpen(open)
-    }
-        const filteredData = fakeData.filter(data => JSON.stringify(data).toLowerCase().includes(search))
-    
+  const handleClose = () => {
+    setIsEditModalOpen(false);
+    setIsInfoModalOpen(false);
+  };
 
-    
+  const handleDeleteModal = (id:number) => {
+    Swal.fire({
+      title: "Você tem certeza?",
+      text: "Você não poderá reverter isso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sim, deletar!",
+    }).then((result) => {
+      if (result.isConfirmed) {
 
+        api.delete(`/storage/${id}`).then((response) => {
+          console.log(response);
+          const newUserData = fakeData.filter((data) => data.id !== id);
+          setFakeData(newUserData);
+          Swal.fire("Deletado!", "Seu Item foi deletado.", "success");
+        });
+        Swal.fire("Deletado!", "Seu Item foi deletado.", "success");
+      }
+    });
+  };
 
+  const toggleDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
+      setDrawerOpen(open);
+    };
+  
+  if(loading) {
     return (
-        <Container>
-            <HeaderEstoque>
-                <Typography fontSize={25}>Estoque</Typography>
-                <div onClick={toggleDrawer(true)} style={{ cursor: 'pointer' }}>
-                    <img src={tabs} alt="tabs" style={{ width: 35, height: 50, marginLeft: 25 }} />
-                </div>
-            </HeaderEstoque>
-            <BodyEstoque>
-                <SearchField
-                    placeholder="Search"
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                />
-                <TableContainer sx={{maxHeight:470, minWidth:370}}>
-                    <Table sx = {{minWidth: 1}} arial-label = 'simple label'>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell sx={{fontWeight:"bold"}} >Produto</TableCell>
-                            <TableCell align="right" sx={{fontWeight:"bold"}}>Code</TableCell>
-                            <TableCell align="right" sx={{fontWeight:"bold"}}>Categoria</TableCell>
-                            <TableCell align="right" sx={{fontWeight:"bold"}}>Qnt.</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {filteredData.map((data, index) => {
-                            return (
-                                <TableRow key={index}
-                                    sx={{'&:last-child td, &:last-child th': 
-                                    { border: 0 },
-                                    '&:not(:last-child)':{
-                                        paddingBottom: '5px',
-                                        paddingTop: '5px',
-                                    }
-                                    }}>
-                                    <TableCell>
-                                        <div style={{display: 'flex', flexDirection:'column', alignItems:'center',}}>
-                                            <img src={data.image} alt="Imagem do produto" style=
-                                            {{width: 60, height: 60}}/>
-                                            <div>{data.name}</div>
-                                        </div>
-                                        
-                                    </TableCell>
-                                    <TableCell align="center" >{data.id}</TableCell>
-                                    <TableCell align="center" >{data.price}</TableCell>
-                                    <TableCell align="center" >{data.stock}</TableCell>
-                                </TableRow>
-                            )
-                        })} 
-                    </TableBody>
-                </Table>
-                </TableContainer>
-                
+      <Box sx={{ display: 'flex', width:"100%", height:"100vh", alignItems:"center", justifyContent:"center" }}>
+        <CircularProgress  size={70}/>
+      </Box>
+    );
+  } else {
+    console.log(fakeData);
+    const filteredData = fakeData.filter((data) =>
+      JSON.stringify(data).toLowerCase().includes(search)
+    );
+  return (
+    <Container>
+      <HeaderEstoque>
+        <Typography fontSize={25}>Estoque</Typography>
+        <div
+          onClick={toggleDrawer(true)}
+          style={{ cursor: "pointer", marginRight: 0 }}
+        >
+          <img
+            src={tabs}
+            alt="tabs"
+            style={{ width: 35, height: 50, marginLeft: 25 }}
+          />
+        </div>
+      </HeaderEstoque>
+      <BodyEstoque>
+        <SearchField
+          placeholder="Search"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+        <TableContainer
+          sx={{ maxHeight: 470, minWidth: 370, overflow: "revert" }}
+        >
+          <Table sx={{ minWidth: 1 }} arial-label="simple label">
+            <TableHead>
+              <TableRow>
+                {fields.map((key) => (
+                  <TableCell
+                    key={key}
+                    align="center"
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: 16,
+                      color: "#A0CC90",
+                      padding: ".5rem 0 .5rem 0",
+                    }}
+                  >
+                    {key}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredData.map((data: Item, index) => {
+                return (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      "&:not(:last-child)": {
+                        paddingBottom: "5px",
+                        paddingTop: "5px",
+                      },
+                    }}
+                  >
+                    {fields.map((key: string) => (
+                      <TableCell
+                        key={key}
+                        align="center"
+                        sx={{
+                          width: key === "actions" ? "30%" : "auto",
+                        }}
+                      >
+                        {key === "actions" ? (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-around",
+                              gap: 5,
+                              alignItems: "center",
+                            }}
+                          >
+                            <InfoOutlinedIcon
+                              sx={{ color: "#003775", cursor: "pointer" }}
+                              onClick={() => handleOpen("info", data)}
+                            />
+                            <EditIcon
+                              sx={{ color: "#eead2d", cursor: "pointer" }}
+                              onClick={() => handleOpen("edit", data)}
+                            />
+                            <DeleteOutlineIcon
+                              sx={{ color: "#d44038", cursor: "pointer" }}
+                              onClick={() => handleDeleteModal(data.id)}
+                            />
+                          </div>
+                        ) : (
+                          data[key as keyof Item]
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </BodyEstoque>
 
-                
-            </BodyEstoque>
-            <ButtonEdit>
-                <Button variant="contained" sx = {{backgroundColor:'#A0CC90',
-                '&:hover':{
-                    backgroundColor:'#A0CC90',
-                },
-                '&:active':{
-                    backgroundColor:'#A0CC90',
-                },
-                color: 'black',
-                fontSize: 15,
-                fontWeight: 'bold',
-                borderRadius: 10,
-                height: 50,
-                width: 200,
-                position: 'fixed',
-                bottom: 15,
-        
-
-                }}>Editar produtos</Button>
-            </ButtonEdit>
-
-            <Drawer anchor='right' open={drawerOpen} onClose={toggleDrawer(false)}>
-                <List>
-                    <ListItem button component="a" href="/Users">
-                        <ListItemText primary="Users" />
-                    </ListItem>
-                    <ListItem button component="a" href="/home">
-                        <ListItemText primary="Home" />
-                    </ListItem>
-                    
-                </List>
-            </Drawer>
-        </Container>
-            
-            
-            
-    )
+      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+        <List>
+          <ListItem button component="a" href="/Users">
+            <ListItemText primary="Users" />
+          </ListItem>
+          <ListItem button component="a" href="/home">
+            <ListItemText primary="Home" />
+          </ListItem>
+        </List>
+      </Drawer>
+      <Modal
+        width="50%"
+        height="50%"
+        isModalClosed={handleClose}
+        isModalOpen={isInfoModalOpen}
+        title="Detalhes do Produto"
+      >
+        <InfoItem
+          description={selectedItem?.description ?? ""}
+          id={selectedItem?.id ?? 0}
+          image={selectedItem?.image ?? ""}
+          name={selectedItem?.name ?? ""}
+          price={selectedItem?.price ?? 0}
+          status={selectedItem?.status ?? 0}
+          stock={selectedItem?.stock ?? 0}
+        />
+      </Modal>
+      <Modal
+        width="50%"
+        height="50%"
+        isModalClosed={handleClose}
+        isModalOpen={isEditModalOpen}
+        title="Editar Produto"
+      >
+        <div>teste</div>
+      </Modal>
+    </Container>
+  );
+}
 }

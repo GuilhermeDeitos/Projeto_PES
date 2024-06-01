@@ -39,7 +39,7 @@ export const BodyUsers = styled.div`
     flex-direction: column;
     color: black;
     border-radius: 30px 0 0px 30px;
-    width: 70%;
+    width: 100%;
     position: absolute;
     top: 10%;
     

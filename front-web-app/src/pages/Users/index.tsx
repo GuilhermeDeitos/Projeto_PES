@@ -1,87 +1,120 @@
-import { useState } from "react"
-import { SearchField } from "../../components/SearchField"
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Drawer, List, ListItem, ListItemText } from "@mui/material"
-import { HeaderUsers, BodyUsers, ButtonEdit } from "./styled"
-import { Container } from "./styled"
-import imagemUser from "../../assets/users.jpg"
-import tabs from "../../assets/tabs.svg"
+import { useEffect, useState } from "react";
+import { SearchField } from "../../components/SearchField";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+  Box,
+} from "@mui/material";
+import { HeaderUsers, BodyUsers } from "./styled";
+import { Container } from "./styled";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditIcon from "@mui/icons-material/Edit";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import tabs from "../../assets/tabs.svg";
+import Swal from "sweetalert2";
+import Modal from "../../components/Modal";
+import { api } from "../../utils/api";
+
+interface UserData {
+  id: number;
+  name: string;
+  horasTrabalhadas: number;
+  status: number;
+  role: string;
+}
 
 export function UsersPage() {
-    const fakeData: any[] = [
-        {
-            name: "Jhon",
-            horasTrabalhadas: 10,
-            status:"Admin",
-            image: imagemUser
-        },
-        {
-            name: "Jane",
-            horasTrabalhadas: 10,
-            status:"Admin",
-            image: imagemUser
-        },
-        {
-            name: "Alice",
-            horasTrabalhadas: 10,
-            status:"Admin",
-            image: imagemUser
-        },
-        {
-            name: "Bob",
-            horasTrabalhadas: 10,
-            status:"Admin",
-            image: imagemUser
-        },
-        {
-            name: "Yudi",
-            horasTrabalhadas: 10,
-            status:"Admin",
-            image: imagemUser
-        },
-        {
-            name: "Deitos",
-            horasTrabalhadas: 10,
-            status:"Bloqueado",
-            image: imagemUser
-        },
-        {
-            name: "Rafael",
-            horasTrabalhadas: 10,
-            status:"Admin",
-            image: imagemUser
-        },
-        {
-            name: "Arthur",
-            horasTrabalhadas: 10,
-            status:"Admin",
-            image: imagemUser
-        },
-    ]
+  const [userData, setUserData] = useState<UserData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  useEffect(() => {
+    api.get("/users/").then((response) => {
+      console.log(response);
+      setUserData(response.data.data);
+      setLoading(false);
+    });
+  }, []);
+  const [search, setSearch] = useState<string>("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedItem, setselectedItem] = useState<UserData | undefined>(
+    undefined
+  );
 
-    const [search, setSearch] = useState<string>("")
-    const [open, setOpen] = useState(false)
-    const [drawerOpen, setDrawerOpen] = useState(false)
-    const [selectedUser, setSelectedUser] = useState<any>(null)
-
-    const handleClickOpen = (user: any) => {
-        setSelectedUser(user)
-        setOpen(true)
+  const handleOpen = (type: string, data: UserData) => {
+    if (type === "edit") {
+      setIsEditModalOpen(true);
+    } else if (type === "info") {
+      setIsInfoModalOpen(true);
     }
 
-    const handleClose = () => {
-        setOpen(false)
-        setSelectedUser(null)
-    }
+    setselectedItem(data);
+  };
 
-    const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
-            return
-        }
-        setDrawerOpen(open)
-    }
+  const handleClose = () => {
+    setIsEditModalOpen(false);
+    setIsInfoModalOpen(false);
+  };
 
-    const filteredData = fakeData.filter(data => JSON.stringify(data).toLowerCase().includes(search))
+  const handleDeleteModal = (id:number) => {
+    Swal.fire({
+      title: "Você tem certeza?",
+      text: "Você não poderá reverter isso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sim, deletar!",
+    }).then((result) => {
+      if (result.isConfirmed) {
 
+        api.delete(`/users/${id}`).then((response) => {
+          console.log(response);
+          const newUserData = userData.filter((data) => data.id !== id);
+          setUserData(newUserData);
+          Swal.fire("Deletado!", "Usuário deletado.", "success");
+
+        }).catch((error) => {
+          Swal.fire("Erro!", "Erro ao deletar usuário.", "error");
+        });
+
+      }
+    });
+  };
+  const fields = ["name", "hours", "role", "status","Actions"];
+
+  const toggleDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
+      setDrawerOpen(open);
+    };
+
+  const filteredData = userData.filter((data: UserData) =>
+    JSON.stringify(data).toLowerCase().includes(search)
+  );
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex" }}>
+        <CircularProgress />
+      </Box>
+    );
+  } else {
     return (
         <Container>
             <HeaderUsers>
@@ -163,7 +196,7 @@ export function UsersPage() {
                     <ListItem button component="a" href="/home">
                         <ListItemText primary="Home" />
                     </ListItem>
-                    
+                    {/* Add more links as needed */}
                 </List>
             </Drawer>
         </Container>
