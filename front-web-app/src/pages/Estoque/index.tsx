@@ -37,20 +37,54 @@ export interface Item {
   status: number;
 }
 
+
+
 export function EstoquePage() {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [storageData, setStorageData] = useState<Item[]>([]);
+
+    const fakeData = [
+        {
+            id: 1,
+            name: "Item 1",
+            price: 10,
+            stock: 100,
+            image: "../../assets/estoque1.jpg",
+            description: "Descrição do item 1",
+            status: 1,
+        },
+        {
+            id: 2,
+            name: "Item 2",
+            price: 20,
+            stock: 200,
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLbIojNZJMCPt8-xOxWsqY27-XkGea2vq1dg&s",
+            description: "Descrição do item 2",
+            status: 1,
+        },
+        {
+            id: 3,
+            name: "Item 3",
+            price: 30,
+            stock: 300,
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLbIojNZJMCPt8-xOxWsqY27-XkGea2vq1dg&s",
+            description: "Descrição do item 3",
+            status: 1,
+        },
+        ];
+
+    const [loading, setLoading] = useState<boolean>(false);
+    const [storageData, setStorageData] = useState<Item[]>(fakeData);
+   /* const [fakeData, setFakeData] = useState<Item[]>([]);/*
+  
   
 
-  useEffect(() => {
+  /*useEffect(() => {
       api.get("/storage/").then((response) => {
         console.log(response)
         setStorageData(response.data.data);
         setLoading(false);
       });
-  }, []);
+  }, []);*/
 
-  console.log(setStorageData)
 
   const fields = ["id", "name", "price", "stock", "actions"];
 
@@ -60,6 +94,8 @@ export function EstoquePage() {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedItem, setselectedItem] = useState<Item | undefined>(undefined);
+
+
 
   const handleOpen = (type: string, data: Item) => {
     if (type === "edit") {
@@ -156,7 +192,7 @@ export function EstoquePage() {
                     sx={{
                       fontWeight: "bold",
                       fontSize: 16,
-                      color: "#A0CC90",
+                      color: "#426636",
                       padding: ".5rem 0 .5rem 0",
                     }}
                   >
@@ -236,7 +272,7 @@ export function EstoquePage() {
         height="50%"
         isModalClosed={handleClose}
         isModalOpen={isInfoModalOpen}
-        title="Detalhes do Produto"
+        title="Product info:"
       >
         <InfoItem
           description={selectedItem?.description ?? ""}
