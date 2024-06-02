@@ -39,18 +39,18 @@ export interface Item {
 
 export function EstoquePage() {
   const [loading, setLoading] = useState<boolean>(true);
-  const [fakeData, setFakeData] = useState<Item[]>([]);
+  const [storageData, setStorageData] = useState<Item[]>([]);
   
 
   useEffect(() => {
       api.get("/storage/").then((response) => {
         console.log(response)
-        setFakeData(response.data.data);
+        setStorageData(response.data.data);
         setLoading(false);
       });
   }, []);
 
-  console.log(setFakeData)
+  console.log(setStorageData)
 
   const fields = ["id", "name", "price", "stock", "actions"];
 
@@ -90,8 +90,8 @@ export function EstoquePage() {
 
         api.delete(`/storage/${id}`).then((response) => {
           console.log(response);
-          const newUserData = fakeData.filter((data) => data.id !== id);
-          setFakeData(newUserData);
+          const newUserData = storageData.filter((data) => data.id !== id);
+          setStorageData(newUserData);
           Swal.fire("Deletado!", "Seu Item foi deletado.", "success");
         });
         Swal.fire("Deletado!", "Seu Item foi deletado.", "success");
@@ -118,8 +118,8 @@ export function EstoquePage() {
       </Box>
     );
   } else {
-    console.log(fakeData);
-    const filteredData = fakeData.filter((data) =>
+    console.log(storageData);
+    const filteredData = storageData.filter((data) =>
       JSON.stringify(data).toLowerCase().includes(search)
     );
   return (
