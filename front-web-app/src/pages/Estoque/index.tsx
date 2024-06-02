@@ -20,6 +20,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { HeaderEstoque, BodyEstoque } from "./styled";
 import { InfoItem } from "../../components/Forms/InfoItem";
+import {EditItem} from "../../components/Forms/EditItem";
 import Swal from "sweetalert2";
 import { Container } from "./styled";
 import Modal from "../../components/Modal";
@@ -288,9 +289,17 @@ export function EstoquePage() {
         height="50%"
         isModalClosed={handleClose}
         isModalOpen={isEditModalOpen}
-        title="Editar Produto"
+        title="Edit Product:"
       >
-        <div>teste</div>
+        <EditItem
+          description={selectedItem?.description ?? ""}
+          id={selectedItem?.id ?? 0}
+          image={selectedItem?.image ?? ""}
+          name={selectedItem?.name ?? ""}
+          price={selectedItem?.price ?? 0}
+          status={selectedItem?.status ?? 0}
+          stock={selectedItem?.stock ?? 0}
+          />
       </Modal>
     </Container>
   );
