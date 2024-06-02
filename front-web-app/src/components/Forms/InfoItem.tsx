@@ -1,5 +1,5 @@
 import React from "react";
-import { Item } from "../../pages/Estoque";
+import { Item } from "../../pages/Estoque/index(teste)";
 import {Table } from "@mui/material";
 import {
   TableBody,

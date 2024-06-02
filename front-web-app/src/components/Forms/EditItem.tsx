@@ -3,10 +3,10 @@
 
 
 import React from "react";
-import { Item } from "../../pages/Estoque";
+import { Item } from "../../pages/Estoque/index(teste)";
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
-import {Table,TextField,Button, ButtonBase, ButtonGroup } from "@mui/material";
+import {Table,TextField, ButtonBase, ButtonGroup } from "@mui/material";
 import {
   TableBody,
   TableCell,

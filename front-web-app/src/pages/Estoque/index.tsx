@@ -13,19 +13,24 @@ import {
   ListItem,
   ListItemText,
   CircularProgress,
-  Box
+  Box,
+  ButtonGroup,
+  ButtonBase
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from '@mui/icons-material/Add';
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { HeaderEstoque, BodyEstoque } from "./styled";
 import { InfoItem } from "../../components/Forms/InfoItem";
 import {EditItem} from "../../components/Forms/EditItem";
+import {AddItem} from "../../components/Forms/AddItem"
 import Swal from "sweetalert2";
 import { Container } from "./styled";
 import Modal from "../../components/Modal";
 import tabs from "../../assets/tabs.svg";
 import {api} from "../../utils/api";
+import React from "react";
 
 //Mexer aqui
 export interface Item {
@@ -42,7 +47,7 @@ export interface Item {
 
 export function EstoquePage() {
 
-    const fakeData = [
+    /*const fakeData = [
         {
             id: 1,
             name: "Item 1",
@@ -70,26 +75,26 @@ export function EstoquePage() {
             description: "Descrição do item 3",
             status: 1,
         },
-        ];
+        ];*/
 
     const [loading, setLoading] = useState<boolean>(false);
-   /* const [fakeData, setFakeData] = useState<Item[]>([]);/*
+    const [fakeData, setFakeData] = useState<Item[]>([]);
   
   
 
-  /*useEffect(() => {
+  useEffect(() => {
       api.get("/storage/").then((response) => {
         console.log(response)
         setFakeData(response.data.data);
         setLoading(false);
       });
-  }, []);*/
+  }, []);
 
 
   const fields = ["id", "name", "price", "stock", "actions"];
 
   const [search, setSearch] = useState<string>("");
-
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -107,9 +112,16 @@ export function EstoquePage() {
     setselectedItem(data);
   };
 
+  const HandleAddOpen = () => 
+    {
+        setIsAddModalOpen(true)
+    }
+
+
   const handleClose = () => {
     setIsEditModalOpen(false);
     setIsInfoModalOpen(false);
+    setIsAddModalOpen(false);
   };
 
   const handleDeleteModal = (id:number) => {
@@ -174,11 +186,30 @@ export function EstoquePage() {
         </div>
       </HeaderEstoque>
       <BodyEstoque>
-        <SearchField
-          placeholder="Search"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-        />
+      <TableHead>
+                <TableRow>
+                <div style={{
+                    width: 500,
+                    marginRight: 25,
+                    marginLeft: 0,
+                    justifyContent: 'center'             
+                }}>
+                
+                <ButtonGroup>
+                    <ButtonBase>
+                    <AddIcon sx={{color: '#03e92f', cursor: 'pointer'}}  onClick = {() => HandleAddOpen()}>                        
+                    </AddIcon>
+                    </ButtonBase>
+                </ButtonGroup>
+                
+                <SearchField
+                    placeholder="Search"
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                />
+                </div>
+                </TableRow>
+                </TableHead>
         <TableContainer
           sx={{ maxHeight: 470, minWidth: 370, overflow: "revert" }}
         >
@@ -301,6 +332,16 @@ export function EstoquePage() {
           stock={selectedItem?.stock ?? 0}
           />
       </Modal>
+      <Modal
+          width="50%"
+          height="50%"
+          isModalClosed={handleClose}
+          isModalOpen={isAddModalOpen}
+          title="Add New Product">
+          <AddItem>
+
+          </AddItem>
+            </Modal>
     </Container>
   );
 }
