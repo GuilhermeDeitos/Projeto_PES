@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { StorageEntity, StorageEntityDTO } from "../../../Entity/StorageEntity";
+import { StorageEntity, StorageEntityDTO } from "../../../Entity/storageEntity";
 import { connect } from "../../../db";
 import { Request, Response } from "express";
 

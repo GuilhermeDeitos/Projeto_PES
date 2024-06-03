@@ -57,6 +57,7 @@ export class CreateTables {
                 email VARCHAR(255) NOT NULL,
                 password VARCHAR(255) NOT NULL,
                 role VARCHAR(255) NOT NULL,
+                STATUS INTEGER NOT NULL default 1,
                 hours INTEGER NOT NULL,
                 created_at TIMESTAMP DEFAULT NOW(),
                 updated_at TIMESTAMP DEFAULT NOW()
@@ -81,6 +82,7 @@ export class CreateTables {
                 id SERIAL PRIMARY KEY,
                 title VARCHAR(255) NOT NULL,
                 status INTEGER NOT NULL,
+                address VARCHAR(255) NOT NULL,
                 description TEXT,
                 created_at TIMESTAMP DEFAULT NOW(),
                 updated_at TIMESTAMP DEFAULT NOW(),

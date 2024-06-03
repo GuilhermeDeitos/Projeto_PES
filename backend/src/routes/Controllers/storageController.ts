@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
 import { StorageControllerClass } from "./Helpers/storageHelper";
-import { StorageEntityDTO } from "../../Entity/StorageEntity";
+import { StorageEntityDTO } from "../../Entity/storageEntity";
 
 const router = express.Router();
 const StorageController = new StorageControllerClass();
