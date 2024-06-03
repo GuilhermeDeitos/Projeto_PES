@@ -20,7 +20,7 @@ export interface Item {
     id: number;
     name: string;
     price: number;
-    stock: number;
+    quantity: number;
     image: string;
     description: string;
     status: number;
@@ -28,99 +28,6 @@ export interface Item {
 }
 
 export function EstoquePage() {
-    const fakeData: Item[] = [
-        {
-            id: 1,
-            name: "Produto 1",
-            price: 17.99,
-            stock: 10,
-            image: estoque1imagem,
-            description: "Produto de alta qualidade",
-            status: 1
-        },
-        {
-            id: 2,
-            name: "Produto 2",
-            price: 17.99,
-            stock: 20,
-            image: estoque1imagem,
-            description: "Produto de alta qualidade",
-            status: 1
-
-        },
-        {
-            id: 3,
-            name: "Produto 3",
-            price: 17.99,
-            stock: 30,
-            image: estoque1imagem,
-            description: "Produto de alta qualidade",
-            status: 1
-        },
-        {
-            id: 4,
-            name: "Produto 4",
-            price: 17.99,
-            stock: 40,
-            image: estoque1imagem,
-            description: "Produto de alta qualidade",
-            status: 1
-        },
-        {
-            id: 5,
-            name: "Produto 5",
-            price: 17.99,
-            stock: 50,
-            image: estoque1imagem,
-            description: "Produto de alta qualidade",
-            status: 1
-        },
-        {
-            id: 6,
-            name: "Produto 6",
-            price: 17.99,
-            stock: 60,
-            image: estoque1imagem,
-            description: "Produto de alta qualidade",
-            status: 1
-        },
-        {
-            id: 7,
-            name: "Produto 7",
-            price: 17.99,
-            stock: 70,
-            image: estoque1imagem,
-            description: "Produto de alta qualidade",
-            status: 1
-        },
-        {
-            id: 8,
-            name: "Produto 8",
-            price: 17.99,
-            stock: 80,
-            image: estoque1imagem,
-            description: "Produto de alta qualidade",
-            status: 1
-        },
-        {
-            id: 9,
-            name: "Produto 9",
-            price: 17.99,
-            stock: 90,
-            image: estoque1imagem,
-            description: "Produto de alta qualidade",
-            status: 1
-        },
-        {
-            id: 10,
-            name: "Produto 10",
-            price: 17.99,
-            stock: 100,
-            image: estoque1imagem,
-            description: "Produto de alta qualidade",
-            status: 1
-        },
-    ]
 
     const fields = ["id", "name", "price", "stock", "actions"]
 

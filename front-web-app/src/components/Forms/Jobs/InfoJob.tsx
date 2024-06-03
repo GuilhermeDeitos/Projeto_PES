@@ -1,17 +1,19 @@
 import React from "react";
-import { Item } from "../../pages/Estoque/index(teste)";
 import { Table } from "@mui/material";
 import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Typography,
 } from "@mui/material";
-import { UserData } from "../../pages/Users";
+import { JobData } from "../../../pages/Home";
 
-export function InfoItem(itemData: Item | UserData) {
+export function InfoJob(itemData: JobData) {
+  const formatter = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "USD",
+  });
   return (
     <TableContainer sx={{ maxHeight: 470, minWidth: 370, overflow: "revert" }}>
       <Table sx={{ minWidth: 1 }} arial-label="simple label">
@@ -32,7 +34,7 @@ export function InfoItem(itemData: Item | UserData) {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <text>{(itemData as Item)[key as keyof Item]}</text>
+                  {key === "value" ? formatter.format(itemData.value) : (itemData as JobData)[key as keyof JobData]}
                 </TableCell>
               </TableRow>
             );

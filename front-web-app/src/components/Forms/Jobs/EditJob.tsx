@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Item } from "../../pages/Estoque/index(teste)";
 import EditIcon from '@mui/icons-material/Edit';
-import CloseIcon from '@mui/icons-material/Close';
+
 import {Table,TextField, ButtonBase, ButtonGroup, Button, TextareaAutosize, Typography } from "@mui/material";
 import {
   TableBody,
@@ -10,14 +9,14 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { InputGroup } from "./styled";
-import { api } from "../../utils/api";
+import { InputGroup } from "../styled";
+import { api } from "../../../utils/api";
 import Swal from "sweetalert2";
 import { AxiosResponse } from "axios";
+import { JobData } from "../../../pages/Home";
 
-
-export function EditItem(itemData:Item) {
-    const [data, setData] = useState<Item>(itemData)
+export function EditJob(itemData:JobData) {
+    const [data, setData] = useState<JobData>(itemData)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setData({
@@ -31,7 +30,7 @@ export function EditItem(itemData:Item) {
         .then(() => {
             Swal.fire({
                 icon: 'success',
-                title: 'Product Edited succesfully',
+                title: 'Job Edited succesfully',
                 showConfirmButton: false,
                 timer: 1500
             }).then(() => {
@@ -42,7 +41,7 @@ export function EditItem(itemData:Item) {
         .catch((error:AxiosResponse) => {
             Swal.fire({
                 icon: 'error',
-                title: 'Failed Editing Product',
+                title: 'Failed Editing Job',
                 showConfirmButton: false,
                 timer: 1500
             })

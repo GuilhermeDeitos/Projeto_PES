@@ -4,22 +4,23 @@ import { Container, RegisterPaper, InputGroup, FormContainer } from "./styled";
 import { TextField, Button, Typography, Link } from "@mui/material";
 import { Password } from "@mui/icons-material";
 import { TabFooter } from "../../components/Footer";
+import { UserData } from "../Users";
+import { api } from "../../utils/api";
+import Swal from "sweetalert2";
+import { AxiosResponse } from "axios";
 
-interface UserData {
-  user: string;
+interface UserFormData extends UserData {
   password: string;
-  email: string;
-  status: number;
-  phone: string;
 }
 
 export function Register() {
-  const [user, setUser] = React.useState<UserData>({
-    user: "",
+  const [user, setUser] = React.useState<UserFormData>({
+    name: "",
     password: "",
     email: "",
     status: 0, // 0 - inativo, 1 - ativo e usuário normal, 2 - ativo e usuário admin, 3 - bloqueado
-    phone: "",
+    role: "",
+    hours: 0
   });
 
   const [confirmPassword, setConfirmPassword] = React.useState<string>("");
@@ -33,6 +34,49 @@ export function Register() {
       });
     }
   };
+
+
+  const createUser = () => {
+    if(user.password !== confirmPassword){
+      Swal.fire({
+        icon: 'error',
+        title: 'Passwords do not match',
+        showConfirmButton: false,
+        timer: 1500
+      
+      })
+      return;
+    } else if(user.password === "" || user.email === "" || user.name === "" || user.role === ""){
+      Swal.fire({
+        icon: 'error',
+        title: 'Please fill all fields',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      return;
+    }
+
+    api.post("/users/", user).then(() => {
+      Swal.fire({
+        icon: 'success',
+        title: 'User registered successfully',
+        showConfirmButton: false,
+        timer: 1500
+      }).then(() => {
+        window.location.href = "/login";
+      })
+    }).catch((error: AxiosResponse) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Failed to register user',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      console.log(error);
+    })
+
+  }
+    
 
   console.log(Password);
   console.log(user);
@@ -49,7 +93,7 @@ export function Register() {
               type="text"
               placeholder="User"
               variant="outlined"
-              name="user"
+              name="name"
               onChange={handleChange}
               required
             />
@@ -87,9 +131,9 @@ export function Register() {
             />
             <TextField
               type="text"
-              placeholder="Phone"
+              placeholder="Role"
               variant="outlined"
-              name="phone"
+              name="role"
               onChange={handleChange}
               required
             />
@@ -101,7 +145,8 @@ export function Register() {
               backgroundColor: "#003775",
               fontWeight: 600,
               borderRadius: 4,
-            }}
+            }} 
+            onClick={createUser}
           >
             Register
           </Button>

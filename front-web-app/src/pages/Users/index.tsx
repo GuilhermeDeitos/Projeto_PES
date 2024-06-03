@@ -14,65 +14,41 @@ import {
   ListItemText,
   CircularProgress,
   Box,
-  Button,
+  ButtonGroup,
+  ButtonBase,
 } from "@mui/material";
-import { HeaderUsers, BodyUsers, ButtonEdit } from "./styled";
-import { InfoItem } from "../../components/Forms/InfoItem";
+import { HeaderUsers, BodyUsers } from "./styled";
+import { EditUser } from "../../components/Forms/Users/EditUser";
 import { Container } from "./styled";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import Add from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import tabs from "../../assets/tabs.svg";
 import Swal from "sweetalert2";
 import Modal from "../../components/Modal";
 import { api } from "../../utils/api";
+import { InfoItem } from "../../components/Forms/InfoItem";
 
-interface UserData {
-  image: string | undefined;
-  id: number;
+export interface UserData {
+  id?: number;
   name: string;
-  horasTrabalhadas: number;
+  hours: number;
   status: number;
   role: string;
+  email: string;
 }
 
 export function UsersPage() {
   const [userData, setUserData] = useState<UserData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  /*useEffect(() => {
+  useEffect(() => {
     api.get("/users/").then((response) => {
       console.log(response);
       setUserData(response.data.data);
       setLoading(false);
     });
-  }, []);*/
-
-  const fakeData = [
-    {
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLbIojNZJMCPt8-xOxWsqY27-XkGea2vq1dg&s",
-      id: 1,
-      name: "User 1",
-      horasTrabalhadas: 10,
-      status: 1,
-      role: "Admin",
-    },
-    {
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLbIojNZJMCPt8-xOxWsqY27-XkGea2vq1dg&s",
-      id: 2,
-      name: "User 2",
-      horasTrabalhadas: 20,
-      status: 0,
-      role: "User",
-    },
-    {
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLbIojNZJMCPt8-xOxWsqY27-XkGea2vq1dg&s",
-      id: 3,
-      name: "User 3",
-      horasTrabalhadas: 30,
-      status: 1,
-      role: "Admin",
-    }
-  ];
+  }, []);
 
   const [search, setSearch] = useState<string>("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -99,13 +75,13 @@ export function UsersPage() {
 
   const handleDeleteModal = (id: number) => {
     Swal.fire({
-      title: "Você tem certeza?",
-      text: "Você não poderá reverter isso!",
+      title: "Are you sure?",
+      text: "You Cannot Reverse this action!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Sim, deletar!",
+      confirmButtonText:"Confirm Deletion",
     }).then((result) => {
       if (result.isConfirmed) {
 
@@ -113,16 +89,18 @@ export function UsersPage() {
           console.log(response);
           const newUserData = userData.filter((data) => data.id !== id);
           setUserData(newUserData);
-          Swal.fire("Deletado!", "Usuário deletado.", "success");
+          Swal.fire("Deleted!", "User deleted.", "success");
 
         }).catch((error) => {
-          Swal.fire("Erro!", "Erro ao deletar usuário.", "error");
+          Swal.fire("Error!", "Error deleting user.", "error");
         });
 
       }
     });
   };
-  const fields = ["name", "hours", "role", "status", "Actions"];
+
+
+  const fields = ["name", "hours", "role", "status", "actions"];
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -136,9 +114,11 @@ export function UsersPage() {
       setDrawerOpen(open);
     };
 
-  const filteredData = fakeData.filter((data: UserData) =>
+  const filteredData = userData.filter((data: UserData) =>
     JSON.stringify(data).toLowerCase().includes(search)
   );
+
+  console.log(filteredData)
   if (loading) {
     return (
       <Box sx={{ display: "flex" }}>
@@ -155,11 +135,22 @@ export function UsersPage() {
           </div>
         </HeaderUsers>
         <BodyUsers>
-          <SearchField
-            placeholder="Search"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
+        <TableHead>
+                <TableRow>
+                <div style={{
+                    width: "100%",
+                    
+                    justifyContent: 'center'             
+                }}>
+                
+                <SearchField
+                    placeholder="Search"
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                />
+                </div>
+                </TableRow>
+                </TableHead>
           <TableContainer sx={{ maxHeight: 470, minWidth: 370 }}>
             <Table sx={{ minWidth: 1 }} arial-label='simple label'>
               <TableHead>
@@ -173,7 +164,7 @@ export function UsersPage() {
                         padding: ".5rem 0 .1rem 0",
                       }}
                     >
-                      {key}
+                      {key.toUpperCase()}
                     </TableCell>
                   ))}
 
@@ -248,13 +239,13 @@ export function UsersPage() {
         height="50%"
         isModalClosed={handleClose}
         isModalOpen={isInfoModalOpen}
-        title="Detalhes do Produto"
+        title="User Details"
       >
         <InfoItem
-          image={selectedItem?.image ?? ""}
           id={selectedItem?.id ?? 0}
+          email={selectedItem?.email ?? ""}
           name={selectedItem?.name ?? ""}
-          horasTrabalhadas={selectedItem?.horasTrabalhadas ?? 0}
+          hours={selectedItem?.hours ?? 0}
           status={selectedItem?.status ?? 0}
           role={selectedItem?.role ?? ""}
         />
@@ -264,10 +255,20 @@ export function UsersPage() {
         height="50%"
         isModalClosed={handleClose}
         isModalOpen={isEditModalOpen}
-        title="Editar Produto"
+        title="Edit User"
       >
-        <div>teste</div>
+        <EditUser
+          id={selectedItem?.id ?? 0}
+          email={selectedItem?.email ?? ""}
+          name={selectedItem?.name ?? ""}
+          hours={selectedItem?.hours ?? 0}
+          status={selectedItem?.status ?? 0}
+          role={selectedItem?.role ?? ""}
+        />
       </Modal>
+
+
+
     </Container>
   );
 }

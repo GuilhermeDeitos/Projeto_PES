@@ -37,8 +37,7 @@ export interface Item {
   id: number;
   name: string;
   price: number;
-  stock: number;
-  image: string;
+  quantity: number;
   description: string;
   status: number;
 }
@@ -47,39 +46,9 @@ export interface Item {
 
 export function EstoquePage() {
 
-    /*const fakeData = [
-        {
-            id: 1,
-            name: "Item 1",
-            price: 10,
-            stock: 100,
-            image: "../../assets/estoque1.jpg",
-            description: "Descrição do item 1",
-            status: 1,
-        },
-        {
-            id: 2,
-            name: "Item 2",
-            price: 20,
-            stock: 200,
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLbIojNZJMCPt8-xOxWsqY27-XkGea2vq1dg&s",
-            description: "Descrição do item 2",
-            status: 1,
-        },
-        {
-            id: 3,
-            name: "Item 3",
-            price: 30,
-            stock: 300,
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLbIojNZJMCPt8-xOxWsqY27-XkGea2vq1dg&s",
-            description: "Descrição do item 3",
-            status: 1,
-        },
-        ];*/
-
     const [loading, setLoading] = useState<boolean>(false);
-    const [storageData, setStorageData] = useState<Item[]>(fakeData);
-    const [fakeData, setFakeData] = useState<Item[]>([]);
+    const [storageData, setStorageData] = useState<Item[]>([]);
+    //const [fakeData, setFakeData] = useState<Item[]>([]);
   
   
 
@@ -92,7 +61,7 @@ export function EstoquePage() {
   }, []);
 
 
-  const fields = ["id", "name", "price", "stock", "actions"];
+  const fields = ["id", "name", "price", "quantity", "actions"];
 
   const [search, setSearch] = useState<string>("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
@@ -127,13 +96,13 @@ export function EstoquePage() {
 
   const handleDeleteModal = (id:number) => {
     Swal.fire({
-      title: "Você tem certeza?",
-      text: "Você não poderá reverter isso!",
+      title: "Are you sure?",
+      text: "You Cannot Reverse this action!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Sim, deletar!",
+      confirmButtonText: "Confirm deletion",
     }).then((result) => {
       if (result.isConfirmed) {
 
@@ -141,9 +110,9 @@ export function EstoquePage() {
           console.log(response);
           const newUserData = storageData.filter((data) => data.id !== id);
           setStorageData(newUserData);
-          Swal.fire("Deletado!", "Seu Item foi deletado.", "success");
+          Swal.fire("Deleted!", "Item Deleted Successfully.", "success");
         });
-        Swal.fire("Deletado!", "Seu Item foi deletado.", "success");
+        Swal.fire("Deleted!", "Item Deleted Successfully.", "success");
       }
     });
   };
@@ -190,9 +159,8 @@ export function EstoquePage() {
       <TableHead>
                 <TableRow>
                 <div style={{
-                    width: 500,
-                    marginRight: 25,
-                    marginLeft: 0,
+                    width: "100%",
+                    
                     justifyContent: 'center'             
                 }}>
                 
@@ -309,11 +277,10 @@ export function EstoquePage() {
         <InfoItem
           description={selectedItem?.description ?? ""}
           id={selectedItem?.id ?? 0}
-          image={selectedItem?.image ?? ""}
           name={selectedItem?.name ?? ""}
           price={selectedItem?.price ?? 0}
           status={selectedItem?.status ?? 0}
-          stock={selectedItem?.stock ?? 0}
+          quantity={selectedItem?.quantity ?? 0}
         />
       </Modal>
       <Modal
@@ -326,11 +293,10 @@ export function EstoquePage() {
         <EditItem
           description={selectedItem?.description ?? ""}
           id={selectedItem?.id ?? 0}
-          image={selectedItem?.image ?? ""}
           name={selectedItem?.name ?? ""}
           price={selectedItem?.price ?? 0}
           status={selectedItem?.status ?? 0}
-          stock={selectedItem?.stock ?? 0}
+          quantity={selectedItem?.quantity ?? 0}
           />
       </Modal>
       <Modal

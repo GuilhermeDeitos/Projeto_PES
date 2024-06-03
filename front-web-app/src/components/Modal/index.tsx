@@ -1,5 +1,6 @@
 import Modal, { Styles } from 'react-modal';
-
+import { CloseSharp } from '@mui/icons-material';
+import { Button } from '@mui/material';
 
 interface ModalProps{
     width: string;
@@ -48,9 +49,18 @@ function CustomModal(props: ModalProps) {
 			style={customStylesModal}
 			ariaHideApp={false}
 		>
-			<div className="header-modal">
+			<div className="header-modal" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '10px',
+                borderBottom: '1px solid #ccc'
+            
+            }}>
 				<h2 className="title">{props.title}</h2>
-				<button className="btn-close btn-header" onClick={props.isModalClosed} />
+				<Button className="btn-close btn-header" onClick={props.isModalClosed}>
+                    <CloseSharp />
+                </Button>
 			</div>
 			<div className="content-modal">{props.children}</div>
 			
